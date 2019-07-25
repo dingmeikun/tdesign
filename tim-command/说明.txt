@@ -1,0 +1,71 @@
+命令模式：命令的发起者，和命令的执行者，进行解耦
+	[1 方便对命令进扩展 2 对多个命令统一控制]
+
+	模式解析：包括四个角色：命令定义、命令实现者、命令执行者、命令调用者
+	
+	// 1 命令定义
+	public interface ICommand{
+		void Execute();
+	}
+	
+	// 2 命令执行者
+	public class Executor{
+		
+		public void executeTranA(){
+			// DO something A
+		}
+		
+		public void executeTranB(){
+			// DO something B
+		}
+	}
+	
+	// 3 命令实现者
+	public class CommandImplA implements ICommand{
+	
+		private Executor executor;
+		
+		public CommandImplA(Executor executor){
+			this.executor = executor;
+		}
+		
+		public void Execute(){
+			this.executor.executeTranA();
+		}
+	}
+	public class CommandImplB implements ICommand{
+	
+		private Executor executor;
+		
+		public CommandImplB(Executor executor){
+			this.executor = executor;
+		}
+		
+		public void Execute(){
+			this.executor.executeTranB();
+		}
+	}
+	
+	// 4 命令调用者
+	public class Invoker{
+		private ICommand iCommand;
+		
+		public void setCommand(ICommand iCommand){
+			this.iCommand = iCommand;
+		}
+		
+		public void runCommand(){
+			this.iCommand.Execute();
+		}
+	}
+	
+	// 5 测试调用
+	public class Test{
+		
+		public void main(String args[]){
+			Executor executor = new Executor();
+			Invoker invoker = new Invoker(new CommandImplA(executor));
+			invoker.setCommand();
+			invoker.runCommand();
+		}
+	}

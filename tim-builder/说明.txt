@@ -1,0 +1,70 @@
+建造者模式：建造者想要去建造一个对象，而这个对象是一个复合对象，复合对象的内部成员对象，需要额外的建造方式
+	[建造者模式：可以理解为使用建造者模式，去建造一个复合对象]
+
+	// 复合对象：产品
+	public class Product {
+		private Window window;
+		private Floor floor;
+		
+		.. getter setter
+	}
+	
+	// 创建构建器
+	public interface Builder{
+		public void makeWindow();
+		
+		public void makeFloor();
+		
+		public Product build();
+	}
+	
+	// 创建构建实现
+	public class InterProduct implements Builder{
+	
+		private Product product = new Product();
+		
+		@Override
+		public void makeWindow() {
+			// TODO 做一些事情：怎么makeWindow，并设置到product中
+			product.setWindow(new Window());
+		}
+
+		@Override
+		public void makeFloor() {
+			// TODO 做一些事情：怎么makeFloor，并设置到product中
+			product.setFloor(new Floor());
+		}
+
+		@Override
+		public Product build() {
+			return product;
+		}
+	}
+	
+	// 命令集合：类似命令模板，需要集中提前【预】做的事情
+	public class Manager{
+		
+		public static void Build(Builder builder){
+			
+			// 按顺序执行
+			// 1 创建window
+			builder.makeWindow();
+			
+			// 2 创建floor
+			builder.makeFloor();
+		}
+	}
+	
+	// 调用者
+	public class Invoker{
+		
+		public static void main(String args[]){
+			Builder builder = new InterProduct(); // 空构造方法，非静态变量不加载，使用加载
+			
+			Manager manager = new Manager();  // 真正去创建产品属性，并构建产品对象实例
+			manager.Build(builder);
+			
+			Product Product = builder.build(); // 获得产品
+		}
+	}
+    

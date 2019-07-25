@@ -1,0 +1,46 @@
+装饰模式：为一个类增加装饰，实质上就是在原来类功能基础上，增加新的功能
+	[装饰模式：
+		动态的增加一个对象的功能
+		要求装饰对象和被装饰对象，实现同一个接口
+		装饰对象，持有被装饰对象实例
+	]
+	
+	// 1 定义上层接口
+	public interface Beauty{
+		void beautiful();
+	}
+	
+	// 2 接口原始实现
+	public class hotDress implements Beauty{
+	
+		public void beautiful(){
+			System.out.println("穿上漂亮的衣服");
+		}
+	}
+	
+	// 3 装饰对象，持有被装饰对象实例
+	public class moreDress implements Beauty{
+	
+		private Beauty beauty;
+		
+		public moreDress(Beauty beauty){
+			this.beauty = beauty;
+		}
+		
+		@Override
+		public void beautiful(){
+			System.out.println("我先去逛了大商场"); // more 功能
+		
+			this.beauty.beautiful();
+			
+			System.out.println("再买了一个漂亮的包包！"); // more 功能
+		}
+	}
+
+	// 4 测试装饰功能
+	public class Test{
+		Beauty hotbeauty = new hotDress();
+		Beauty moreBeauty = new moreDress(Beauty);
+		moreBeauty.beautiful();
+	}
+	

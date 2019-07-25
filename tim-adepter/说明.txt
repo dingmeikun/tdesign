@@ -1,0 +1,165 @@
+工厂模式：包括：简单工厂模式、抽象工厂模式、工厂方法模式
+	        目的：增加程序的可扩展性，降低各个模块间的耦合度
+简单工厂模式案例：----------------------------------------------------------------------------------------------------------------
+
+1、首先是两个model类
+	public class Broom{              public class Plane{
+		public Broom(){};				public Plane(){};
+		public void run(){			 public void run(){
+			// TODO							// TOOD
+		}								}
+	}								 }
+
+2、然后是一个简单工厂类
+	public class simpleFactory{
+		public Object create(Class<?> clazz) {
+			if(clazz.getName().equals(Plane.class.getName())){
+				return createBroom();
+			}else if(clazz.getName().equals(Broom.class.getName())){
+				return createPlane();
+			}
+			return null;
+		}
+		
+		private Broom createBroom(){
+			new Broom();
+		}
+		
+		private Plane createPlane(){
+			new Plane();
+		}
+	}
+	
+3、最后是调用类
+	public class FactoryTest{
+		public static void main(String[] args){
+			simpleFactory factory = new simpleFactory();
+			Broom broom = (Broom) factory.create(Broom.Class);
+			broom.run();
+		}
+	}
+
+
+工厂方法模式案例：----------------------------------------------------------------------------------------------------------------
+
+1、创建抽象工厂
+	public abstract class AbstractFactory{
+		public abstract Moveable create();
+	}
+2、创建具体工厂
+	public class BroomFactory extends AbstractFactory{
+		@Override
+		public abstract Moveable create(){
+			return new Broom(); //使用上面简单工厂例子创建的model类
+		}
+	}
+3、创建抽象产品接口
+	public interface Moveable{
+		public void run();
+	}
+4、创建具体产品	
+	public class Broom implements Moveables{
+		@Override
+		public void run(){
+			System.out.println("i am Broom and i'm fly ~");
+		}
+	}
+5、创建测试类
+	public class FactoryTest{
+		AbstractFactory absFactory = new AbstractFactory();
+		Moveable moveable = absFactory.create();
+		moveable.run();
+	}
+	
+
+抽象工厂模式案例：----------------------------------------------------------------------------------------------------------------
+
+1、创建抽象工厂
+	public abstract interface AbstractFactory{
+		public <T> T createSpecies(String species);
+	}
+	
+2、扩展抽象工厂
+	AnimalFactory implements AbstractFactory{                 PlantFactory implements AbstractFactory{
+		@Override											   	  @Override
+		public <T> T createSpecies(String species){				  public <T> T createSpecies(String species){
+			AnimalModel animal = null;							  	  plantModel plant = null;
+			if(condition1){											  if(condition1){
+				animal = new tiger();									  plant = new Bamboo();
+			}else if(condition2){									  }else if(condition2){
+				animal = new pare();									  plant = new BigTree();
+			}														  }
+			return (T) animal;										  return (T) plant;
+		}														  }
+	}														  }
+	
+3、多态Model对象,建立抽象类集成BaseModel对象
+	public abstract class AnimalModel extends BaseModel{
+		protected String name;
+		
+		public abstract void create();
+		
+		public void run(){
+			System.out.println("i am a " + name + " and i was running!");
+		}
+		
+		public void setName(String name){
+			this.name = name;
+		}
+	}
+	
+	扩展这个抽象的动物类
+	public class tiger extends AnimalModel{
+		@Override
+		public void create(){
+			super.setName("create a tiger");
+			System.out.println(name + " is created !");
+		}
+	}
+
+4、调用工厂
+	创建简单调用主类
+	public class creator{
+		public static void main(String[] args){
+			creationHouse home = new creationHouse(new AnimalFactory());
+		}
+	}
+	
+	创建工厂调用类
+	public class creationHouse{
+		
+		AbstractFactory abstractFactory;
+		
+		public creationHouse(AbstractFactory abstractFactory){
+			setFactory(abstractFactory);
+		}
+		
+		private void setFactory(AbstractFactory abstractFactory) throws IOException{
+			AnimalFactory animal = null;
+			tihs.abstractFactory = abstractFactory;
+			
+			while(true){
+				String species = getSpecies();
+				if(species.equelse("animal") || condition){
+					animal = abstractFactory.createSpecies();
+					if(animal != null){
+						animal.create();
+						animal.run();
+					}
+				}
+			}
+		}
+		
+		public String getSpecies() throws IOException{
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("please input species:");
+			String species = bufferedreader.readLine();
+			return species;
+		}
+	}
+	
+	
+####### 这里就要一点了，工厂工厂，肯定是拿来创建东西的，这类就是拿来创建对象的，所以了，一定要记住，一般的工厂实现，都是调用具体工厂的父类方法，并且返回一个对象
+	那么这个对象，可以是具体定义的某个对象，也可以是该对象的子类，但是一般拿来抽象的话，一般是父类接口或者抽象类。
+	
+	

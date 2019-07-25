@@ -1,0 +1,54 @@
+模板模式：我们在一个类中，定义一个类似模板的方法：
+	[模板：具体解释可以理解为，通过规定一些操作的执行顺序，或者需要指定哪些方法需要执行，指定到里边的某个模板方法中！]
+
+    如以下定义抽象类，和子类实现：
+	public abstract class Template{
+		
+		// 启动
+		protected abstract void start();
+		
+		// final修饰，子类不能修改他的执行顺序
+		final public void run(){
+			this.start();
+			
+			this.stop();
+		}
+		
+		// stop
+		protected abstract void stop();
+	}
+	
+	public class baoma extends Template{
+		
+		@Override
+		public void start() {
+			System.out.println("宝马启动");
+		}
+		@Override
+		public void stop() {
+			System.out.println("宝马停车");
+		}
+	}
+	
+	public class benci extends Template{
+		
+		@Override
+		public void start() {
+			System.out.println("奔驰启动");
+		}
+		@Override
+		public void stop() {
+			System.out.println("奔驰停车");
+		}
+	}
+	
+	// 测试类
+	public class Test{
+		public static void main(String[] args){			
+			baoma baoma = new baoma();
+			baoma.run();
+			
+			benci benci = new benci();
+			benci.run();
+		}
+	}
