@@ -8,7 +8,7 @@
 	<properties>
 		<ltts-module>true</ltts-module>
 		<access-rule>*;**/*</access-rule>
-		<commons-io.version>2.5</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
 	</properties>
 
 	<dependencies>
